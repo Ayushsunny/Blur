@@ -1,5 +1,5 @@
 // pages/index.tsx
-import CollectionsList from "./components/CollectionsList";
+import CollectionsList from "../components/CollectionsList";
 import sampleData from "./data/sampleCollectionsData.json";
 
 export default function Home() {
