@@ -1,6 +1,4 @@
 "use client";
-
-// components/CollectionsList.tsx
 import { useState } from "react";
 
 // Define the type for the data structure
@@ -10,14 +8,10 @@ type CollectionItem = {
   top_bid: string;
   "1d_change": string;
   "7d_change": string;
-  "15m_volume": string;
-  "1d_volume": string;
-  "7d_volume": string;
   owners: string;
   supply: number;
 };
 
-// Define the props type for the component
 interface CollectionsListProps {
   data: CollectionItem[];
 }
@@ -36,10 +30,9 @@ const CollectionsList: React.FC<CollectionsListProps> = ({ data }) => {
     const aValue = a[sortConfig.key];
     const bValue = b[sortConfig.key];
 
-    // Parsing numeric values from strings if necessary, handling ETH values as strings
     const parseValue = (value: string | number) => {
       if (typeof value === "number") return value;
-      return parseFloat(value.replace(/[^\d.-]/g, "")) || 0; // Remove non-numeric characters and parse as float
+      return parseFloat(value.replace(/[^\d.-]/g, "")) || 0;
     };
 
     const aParsed = parseValue(aValue);
@@ -62,77 +55,92 @@ const CollectionsList: React.FC<CollectionsListProps> = ({ data }) => {
     if (sortConfig.key === key) {
       return sortConfig.direction === "asc" ? "text-green-500" : "text-red-500";
     }
-    return "";
+    return "text-gray-400";
   };
 
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full border-collapse block md:table">
-        <thead className="block md:table-header-group">
-          <tr className="border-b md:border-none block md:table-row">
+    <div className="w-full h-full overflow-auto bg-[#0d0d0d]">
+      <table className="w-full h-full table-fixed bg-[#0d0d0d] text-white text-sm font-medium">
+        <thead className="bg-[#0d0d0d] text-gray-400 sticky top-0">
+          <tr className="bg-[#1a1a1a]">
             <th
-              className="p-2 md:border md:border-grey-500 text-left block md:table-cell cursor-pointer"
+              className="p-4 cursor-pointer font-normal w-1/6 text-left"
               onClick={() => requestSort("project")}
             >
-              Project <span className={getHeaderClass("project")}>▲▼</span>
+              <div className="flex items-center">
+                Project
+                <span className={`ml-2 ${getHeaderClass("project")}`}>
+                  {sortConfig.key === "project"
+                    ? sortConfig.direction === "asc"
+                      ? "▲"
+                      : "▼"
+                    : "▲▼"}
+                </span>
+              </div>
             </th>
             <th
-              className="p-2 md:border md:border-grey-500 text-left block md:table-cell cursor-pointer"
+              className="p-4 cursor-pointer font-normal w-1/6 text-left"
               onClick={() => requestSort("floor_price")}
             >
-              Floor Price{" "}
-              <span className={getHeaderClass("floor_price")}>▲▼</span>
+              <div className="flex items-center">
+                Floor Price
+                <span className={`ml-2 ${getHeaderClass("floor_price")}`}>
+                  {sortConfig.key === "floor_price"
+                    ? sortConfig.direction === "asc"
+                      ? "▲"
+                      : "▼"
+                    : "▲▼"}
+                </span>
+              </div>
             </th>
-            <th className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
-              Top Bid
-            </th>
+            <th className="p-4 font-normal w-1/6 text-left">Top Bid</th>
             <th
-              className="p-2 md:border md:border-grey-500 text-left block md:table-cell cursor-pointer"
+              className="p-4 cursor-pointer font-normal w-1/6 text-left"
               onClick={() => requestSort("1d_change")}
             >
-              1D Change <span className={getHeaderClass("1d_change")}>▲▼</span>
+              <div className="flex items-center">
+                1D Change
+                <span className={`ml-2 ${getHeaderClass("1d_change")}`}>
+                  {sortConfig.key === "1d_change"
+                    ? sortConfig.direction === "asc"
+                      ? "▲"
+                      : "▼"
+                    : "▲▼"}
+                </span>
+              </div>
             </th>
             <th
-              className="p-2 md:border md:border-grey-500 text-left block md:table-cell cursor-pointer"
+              className="p-4 cursor-pointer font-normal w-1/6 text-left"
               onClick={() => requestSort("7d_change")}
             >
-              7D Change <span className={getHeaderClass("7d_change")}>▲▼</span>
+              <div className="flex items-center">
+                7D Change
+                <span className={`ml-2 ${getHeaderClass("7d_change")}`}>
+                  {sortConfig.key === "7d_change"
+                    ? sortConfig.direction === "asc"
+                      ? "▲"
+                      : "▼"
+                    : "▲▼"}
+                </span>
+              </div>
             </th>
-            <th className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
-              Owners
-            </th>
-            <th className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
-              Supply
-            </th>
+            <th className="p-4 font-normal w-1/6 text-left">Owners</th>
+            <th className="p-4 font-normal w-1/6 text-left">Supply</th>
           </tr>
         </thead>
-        <tbody className="block md:table-row-group">
+        <tbody>
           {sortedData.map((item, index) => (
             <tr
               key={index}
-              className="bg-black-200 border border-grey-500 md:border-none block md:table-row"
+              className="bg-[#1a1a1a] hover:bg-[#262626] transition duration-150"
             >
-              <td className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
-                {item.project}
-              </td>
-              <td className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
-                {item.floor_price}
-              </td>
-              <td className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
-                {item.top_bid}
-              </td>
-              <td className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
-                {item["1d_change"]}
-              </td>
-              <td className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
-                {item["7d_change"]}
-              </td>
-              <td className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
-                {item.owners}
-              </td>
-              <td className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
-                {item.supply}
-              </td>
+              <td className="p-4 text-left">{item.project}</td>
+              <td className="p-4 text-left">{item.floor_price} ETH</td>
+              <td className="p-4 text-left">{item.top_bid} ETH</td>
+              <td className="p-4 text-left">{item["1d_change"]}%</td>
+              <td className="p-4 text-left">{item["7d_change"]}%</td>
+              <td className="p-4 text-left">{item.owners}</td>
+              <td className="p-4 text-left">{item.supply}</td>
             </tr>
           ))}
         </tbody>
