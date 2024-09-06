@@ -7,7 +7,13 @@ module.exports = {
   ],
   theme: {
     extend: {
+      borderWidth: {
+        'thin': '0.05px', 
+        'thin-md': '0.1px',
+      },
       colors: {
+        Yellop: '#F6AE2D',
+        Orango: '#FF8700',
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
