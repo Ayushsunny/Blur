@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 // Define the type for the data structure
 type CollectionItem = {
@@ -21,6 +21,15 @@ interface CollectionsListProps {
 }
 
 const CollectionsList: React.FC<CollectionsListProps> = ({ data }) => {
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'auto'; // Re-enable scrolling when the component is unmounted
+    };
+  }, []);
+
+
   const [sortConfig, setSortConfig] = useState<{
     key: keyof CollectionItem | null;
     direction: "asc" | "desc";
@@ -29,157 +38,137 @@ const CollectionsList: React.FC<CollectionsListProps> = ({ data }) => {
     direction: "asc",
   });
 
-  const sortedData = [...data].sort((a, b) => {
-    if (sortConfig.key === null) return 0;
-    const aValue = a[sortConfig.key];
-    const bValue = b[sortConfig.key];
+  // Handle sorting
+  const sortedData = useMemo(() => {
+    if (sortConfig.key === null) return data;
+    return [...data].sort((a, b) => {
+      const aValue = a[sortConfig.key as keyof CollectionItem];
+      const bValue = b[sortConfig.key as keyof CollectionItem];
 
-    const parseValue = (value: string | number) => {
-      if (typeof value === "number") return value;
-      return parseFloat(value.replace(/[^\d.-]/g, "")) || 0;
-    };
+      const parseValue = (value: string | number) =>
+        typeof value === "number"
+          ? value
+          : parseFloat(value.replace(/[^\d.-]/g, "")) || 0;
 
-    const aParsed = parseValue(aValue);
-    const bParsed = parseValue(bValue);
+      const aParsed = parseValue(aValue);
+      const bParsed = parseValue(bValue);
 
-    return sortConfig.direction === "asc"
-      ? aParsed - bParsed
-      : bParsed - aParsed;
-  });
+      return sortConfig.direction === "asc" ? aParsed - bParsed : bParsed - aParsed;
+    });
+  }, [data, sortConfig]);
 
   const requestSort = (key: keyof CollectionItem) => {
-    let direction: "asc" | "desc" = "asc";
-    if (sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
-    }
-    setSortConfig({ key, direction });
+    setSortConfig((prevConfig) => ({
+      key,
+      direction: prevConfig.key === key && prevConfig.direction === "asc" ? "desc" : "asc",
+    }));
   };
 
-  const getHeaderClass = (key: keyof CollectionItem) => {
-    if (sortConfig.key === key) {
-      return sortConfig.direction === "asc" ? "text-green-500" : "text-red-500";
-    }
-    return "text-gray-400"; // Default color for unsorted columns
-  };
+  const getHeaderClass = (key: keyof CollectionItem) =>
+    sortConfig.key === key
+      ? sortConfig.direction === "asc"
+        ? "text-green-500"
+        : "text-red-500"
+      : "text-gray-400";
 
   return (
-    <div className="w-full h-full overflow-auto bg-[#0d0d0d]">
-      <table className="w-full h-full table-fixed bg-[#0d0d0d] text-white text-sm font-medium">
-        <thead>
-          <tr className="text-left bg-[#0d0d0d] text-gray-400">
-            <th
-              className="p-4 cursor-pointer font-normal w-1/4 text-center" // Adjust width for profile column
-              onClick={() => requestSort("project")}
-            >
-              <div className="flex items-center justify-center">
-                Profile
-                <span className={`ml-2 ${getHeaderClass("project")}`}>
-                  {sortConfig.key === "project"
-                    ? sortConfig.direction === "asc"
-                      ? "▲"
-                      : "▼"
-                    : "▲▼"}
-                </span>
-              </div>
-            </th>
-            <th
-              className="p-4 cursor-pointer font-normal text-center"
-              onClick={() => requestSort("floor_price")}
-            >
-              <div className="flex items-center justify-center">
-                Floor Price
-                <span className={`ml-2 ${getHeaderClass("floor_price")}`}>
-                  {sortConfig.key === "floor_price"
-                    ? sortConfig.direction === "asc"
-                      ? "▲"
-                      : "▼"
-                    : "▲▼"}
-                </span>
-              </div>
-            </th>
-            <th className="p-4 font-normal text-center">Top Bid</th>
-            <th
-              className="p-4 cursor-pointer font-normal text-center"
-              onClick={() => requestSort("1d_change")}
-            >
-              <div className="flex items-center justify-center">
-                1D Change
-                <span className={`ml-2 ${getHeaderClass("1d_change")}`}>
-                  {sortConfig.key === "1d_change"
-                    ? sortConfig.direction === "asc"
-                      ? "▲"
-                      : "▼"
-                    : "▲▼"}
-                </span>
-              </div>
-            </th>
-            <th
-              className="p-4 cursor-pointer font-normal text-center"
-              onClick={() => requestSort("7d_change")}
-            >
-              <div className="flex items-center justify-center">
-                7D Change
-                <span className={`ml-2 ${getHeaderClass("7d_change")}`}>
-                  {sortConfig.key === "7d_change"
-                    ? sortConfig.direction === "asc"
-                      ? "▲"
-                      : "▼"
-                    : "▲▼"}
-                </span>
-              </div>
-            </th>
-            <th className="p-4 font-normal text-center">15m Volume</th>
-            <th className="p-4 font-normal text-center">1d Volume</th>
-            <th className="p-4 font-normal text-center">7d Volume</th>
-            <th className="p-4 font-normal text-center">Owners</th>
-            <th className="p-4 font-normal text-center">Supply</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedData.map((item, index) => (
-            <tr
-              key={index}
-              className="bg-[#1a1a1a] hover:bg-[#262626] transition duration-150"
-            >
-              <td className="p-4 pl-8 flex items-center">
-                <img
-                  src="https://i.pinimg.com/736x/25/f2/b3/25f2b3e99297a4348c409f37abed5ed8.jpg"
-                  alt="profile image"
-                  className="w-8 h-8 rounded-full mr-4"
-                />
-                <span className="text-left">{item.project}</span>
-              </td>
-              <td className="p-4 text-center">{item.floor_price} ETH</td>
-              <td className="p-4 text-center">
-                {item.top_bid == "-" ? "-" : `${item.top_bid} ETH`}
-              </td>
-              <td
-                className={`p-4 text-center ${
-                  parseFloat(item["1d_change"]) >= 0
-                    ? "text-green-500"
-                    : "text-red-500"
-                }`}
+    <div className="w-full flex flex-col bg-black">
+      <div className="overflow-y-auto" style={{ maxHeight: "100vh" }}>
+        <table className="w-full table-auto bg-black text-white text-sm font-medium">
+          <thead className="sticky top-0 bg-black z-5">
+            <tr className="text-left text-gray-400">
+              <th
+                className="p-3 cursor-pointer font-normal w-1/4 bg-black"
+                onClick={() => requestSort("project")}
               >
-                {item["1d_change"]}%
-              </td>
-              <td
-                className={`p-4 text-center ${
-                  parseFloat(item["7d_change"]) >= 0
-                    ? "text-green-500"
-                    : "text-red-500"
-                }`}
+                <div className="flex items-center ml-7">
+                  Profile
+                  <span className={`ml-2 ${getHeaderClass("project")}`}>
+                    {sortConfig.key === "project" && (sortConfig.direction === "asc" ? "▲" : "▼")}
+                  </span>
+                </div>
+              </th>
+              <th
+                className="p-3 cursor-pointer font-normal text-center"
+                onClick={() => requestSort("floor_price")}
               >
-                {item["7d_change"]}%
-              </td>
-              <td className="p-4 text-center">{item["15m_volume"]}</td>
-              <td className="p-4 text-center">{item["1d_volume"]}</td>
-              <td className="p-4 text-center">{item["7d_volume"]}</td>
-              <td className="p-4 text-center">{item.owners}</td>
-              <td className="p-4 text-center">{item.supply}</td>
+                <div className="flex items-center justify-center">
+                  Floor Price
+                  <span className={`ml-2 ${getHeaderClass("floor_price")}`}>
+                    {sortConfig.key === "floor_price" && (sortConfig.direction === "asc" ? "▲" : "▼")}
+                  </span>
+                </div>
+              </th>
+              <th className="p-3 font-normal text-center">Top Bid</th>
+              <th
+                className="p-3 cursor-pointer font-normal text-center"
+                onClick={() => requestSort("1d_change")}
+              >
+                <div className="flex items-center justify-center">
+                  1D Change
+                  <span className={`ml-2 ${getHeaderClass("1d_change")}`}>
+                    {sortConfig.key === "1d_change" && (sortConfig.direction === "asc" ? "▲" : "▼")}
+                  </span>
+                </div>
+              </th>
+              <th
+                className="p-3 cursor-pointer font-normal text-center"
+                onClick={() => requestSort("7d_change")}
+              >
+                <div className="flex items-center justify-center">
+                  7D Change
+                  <span className={`ml-2 ${getHeaderClass("7d_change")}`}>
+                    {sortConfig.key === "7d_change" && (sortConfig.direction === "asc" ? "▲" : "▼")}
+                  </span>
+                </div>
+              </th>
+              <th className="p-3 font-normal text-center">15m Volume</th>
+              <th className="p-3 font-normal text-center">1d Volume</th>
+              <th className="p-3 font-normal text-center">7d Volume</th>
+              <th className="p-3 font-normal text-center">Owners</th>
+              <th className="p-3 font-normal text-center">Supply</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {sortedData.map((item, index) => (
+              <tr
+                key={index}
+                className="bg-[#1a1a1a] hover:bg-[#262626] transition duration-150"
+              >
+                <td className="p-3 pl-8 flex items-center">
+                  <img
+                    src="https://i.pinimg.com/736x/25/f2/b3/25f2b3e99297a4348c409f37abed5ed8.jpg"
+                    alt="profile"
+                    className="w-8 h-8 rounded-full mr-4"
+                  />
+                  <span>{item.project}</span>
+                </td>
+                <td className="p-3 text-center">{item.floor_price} ETH</td>
+                <td className="p-3 text-center">{item.top_bid === "-" ? "-" : `${item.top_bid} ETH`}</td>
+                <td
+                  className={`p-3 text-center ${
+                    parseFloat(item["1d_change"]) >= 0 ? "text-green-500" : "text-red-500"
+                  }`}
+                >
+                  {item["1d_change"]}%
+                </td>
+                <td
+                  className={`p-3 text-center ${
+                    parseFloat(item["7d_change"]) >= 0 ? "text-green-500" : "text-red-500"
+                  }`}
+                >
+                  {item["7d_change"]}%
+                </td>
+                <td className="p-3 text-center">{item["15m_volume"]}</td>
+                <td className="p-3 text-center">{item["1d_volume"]}</td>
+                <td className="p-3 text-center">{item["7d_volume"]}</td>
+                <td className="p-3 text-center">{item.owners}</td>
+                <td className="p-3 text-center">{item.supply}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
