@@ -3,6 +3,15 @@
 import { useState, useCallback, useEffect } from 'react';
 import { ethers } from 'ethers';
 
+declare global {
+  interface Window {
+    ethereum?: {
+      request: (args: { method: string }) => Promise<string[]>;
+      selectedAddress?: string;
+    };
+  }
+}
+
 export interface AccountType {
   address?: string;
   balance?: string;
@@ -32,8 +41,12 @@ export const useMetaMask = () => {
           network: network.name,
         });
         setIsConnected(true);
-      } catch (error: any) {
-        console.error(`Error connecting to MetaMask: ${error?.message ?? error}`);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.error(`Error connecting to MetaMask: ${error.message}`);
+        } else {
+          console.error(`Error connecting to MetaMask: ${String(error)}`);
+        }
       }
     } else {
       console.error("MetaMask not installed");

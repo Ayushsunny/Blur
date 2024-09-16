@@ -1,6 +1,10 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import Image from "next/image";
+
+import profileImage from '@/assets/profile/profile.jpg';
+
 
 // Define the type for the data structure
 type CollectionItem = {
@@ -136,26 +140,26 @@ const CollectionsList: React.FC<CollectionsListProps> = ({ data }) => {
                 className="bg-[#1a1a1a] hover:bg-[#262626] transition duration-150"
               >
                 <td className="p-3 pl-8 flex items-center">
-                  <img
-                    src="https://i.pinimg.com/736x/25/f2/b3/25f2b3e99297a4348c409f37abed5ed8.jpg"
-                    alt="profile"
-                    className="w-8 h-8 rounded-full mr-4"
+                  <Image
+                    src={profileImage}
+                    alt={`${item.project} profile`}
+                    width={32}
+                    height={32}
+                    className="rounded-full mr-4"
                   />
                   <span>{item.project}</span>
                 </td>
                 <td className="p-3 text-center">{item.floor_price} ETH</td>
                 <td className="p-3 text-center">{item.top_bid === "-" ? "-" : `${item.top_bid} ETH`}</td>
                 <td
-                  className={`p-3 text-center ${
-                    parseFloat(item["1d_change"]) >= 0 ? "text-green-500" : "text-red-500"
-                  }`}
+                  className={`p-3 text-center ${parseFloat(item["1d_change"]) >= 0 ? "text-green-500" : "text-red-500"
+                    }`}
                 >
                   {item["1d_change"]}%
                 </td>
                 <td
-                  className={`p-3 text-center ${
-                    parseFloat(item["7d_change"]) >= 0 ? "text-green-500" : "text-red-500"
-                  }`}
+                  className={`p-3 text-center ${parseFloat(item["7d_change"]) >= 0 ? "text-green-500" : "text-red-500"
+                    }`}
                 >
                   {item["7d_change"]}%
                 </td>
