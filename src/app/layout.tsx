@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import SubNavbar from "@/components/SubNavbar";
 import TaskBar from "@/components/Taskbar";
+import LandingPage from "@/components/LandingPage";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,13 +29,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <title>Blur Marketplace - Retro Style</title>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar />
+        {/* <Navbar />
         <SubNavbar />
         {children}
-        <TaskBar ethPrice={2372.15} />
+        <TaskBar ethPrice={2372.15} /> */}
+        <LandingPage />
       </body>
     </html>
   );

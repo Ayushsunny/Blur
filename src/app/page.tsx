@@ -1,4 +1,3 @@
-
 import CollectionsList from "../components/CollectionsList";
 import sampleData from "./data/sampleCollectionsData.json";
 

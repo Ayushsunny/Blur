@@ -25,3 +25,19 @@ body {
     text-wrap: balance;
   }
 }
+
+.retro-bg {
+  background-color: #dcdcdc;
+}
+
+.window {
+  box-shadow: 2px 2px 0px #000;
+}
+
+.window-header {
+  box-shadow: inset -1px -1px 0px #fff, inset 1px 1px 0px #000;
+}
+
+.window-body {
+  box-shadow: inset -1px -1px 0px #fff, inset 1px 1px 0px #000;
+}
