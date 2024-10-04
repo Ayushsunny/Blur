@@ -238,5 +238,65 @@
     "7d_volume": "0.92",
     "owners": "37,765 (67%)",
     "supply": 56723
+  },
+  {
+    "project": "Syndicate Genesis",
+    "floor_price": "0.10",
+    "top_bid": "-",
+    "1d_change": "0.00",
+    "7d_change": "0.00",
+    "15m_volume": "-",
+    "1d_volume": "0.09",
+    "7d_volume": "0.00",
+    "owners": "47,543 (100%)",
+    "supply": 47543
+  },
+  {
+    "project": "Genesis",
+    "floor_price": "0.01",
+    "top_bid": "-",
+    "1d_change": "1.98",
+    "7d_change": "0.00",
+    "15m_volume": "-",
+    "1d_volume": "0.00",
+    "7d_volume": "0.01",
+    "owners": "47,318 (50%)",
+    "supply": 94754
+  },
+  {
+    "project": "Pirate Nation - Mystery Chest",
+    "floor_price": "0.50",
+    "top_bid": "-",
+    "1d_change": "0.00",
+    "7d_change": "-13.79",
+    "15m_volume": "-",
+    "1d_volume": "0.01",
+    "7d_volume": "0.00",
+    "owners": "46,949 (100%)",
+    "supply": 46949
+  },
+  {
+    "project": "breathe in. breathe out. enjoy.",
+    "floor_price": "0.00",
+    "top_bid": "-",
+    "1d_change": "0.00",
+    "7d_change": "-16.62",
+    "15m_volume": "-",
+    "1d_volume": "0.00",
+    "7d_volume": "0.01",
+    "owners": "39,364 (41%)",
+    "supply": 96778
+  },
+  {
+    "project": "Scientists",
+    "floor_price": "0.02",
+    "top_bid": "0.01",
+    "1d_change": "2.95",
+    "7d_change": "0.00",
+    "15m_volume": "-",
+    "1d_volume": "0.14",
+    "7d_volume": "0.92",
+    "owners": "37,765 (67%)",
+    "supply": 56723
   }
 ]

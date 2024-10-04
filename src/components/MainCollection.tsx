@@ -38,7 +38,7 @@ export default function MainCollection() {
   ];
 
   return (
-    <section className="bg-black py-16">
+    <section className="bg-retroBg py-16">
       <div className="container mx-auto text-center relative">
         <div className="relative">
           <img

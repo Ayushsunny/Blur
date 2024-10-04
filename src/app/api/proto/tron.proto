@@ -1,0 +1,68 @@
+syntax = "proto3";
+package tron;
+
+// import "google/protobuf/struct.proto";
+// import "google/protobuf/any.proto";
+
+service Tron {
+    rpc CreateToken (TokenItem) returns (UTransactionItem);
+    rpc BroadcastToken (STransactionItem) returns (TokenContractAdd);
+    rpc BuyToken (TokenTradeItem) returns (TokenTradeTx);
+    rpc SellToken (TokenTradeItem) returns (TokenTradeTx);
+    // rpc DeleteToken(TokenItem) returns (TokenTradeTx);
+}
+
+message TokenItem {
+    string name = 1;
+    string description = 2;
+    string symbol = 3;
+    int32 totalSupply = 4;
+    string issuer = 5;
+}
+
+message UTransactionItem {
+    // google.protobuf.Any trx = 1;
+    string trx = 1;
+}
+
+message STransactionItem {
+    // google.protobuf.Any trx = 1;
+    // google.protobuf.Any utrx = 2;
+    string trx = 1;
+    string utrx = 2;
+}
+
+message TokenContractAdd {
+    string add = 1;
+}
+
+message TokenTradeItem {
+    string from = 1;
+    string to = 2;
+    string symbol = 3;
+    int32 amount = 4;
+}
+
+message TokenTradeTx {
+    string tx = 1;
+}
+
+// enum  Category {
+// SMARTPHONE = 1;
+// CAMERA = 2;
+// LAPTOPS = 3;
+// HEADPHONES = 4;
+// CHARGERS = 5;
+// SPEAKERS = 6;
+// TELEVISIONS = 7;
+// MODEMS = 8;
+// KEYBOARDs = 9;
+// MICROPHONES = 10;
+// }
+// message ProductItem {
+// int32 id = 1;
+// string name = 2;
+// string description = 3;
+// float price = 4;
+// Category category = 5;
+// }

@@ -1,15 +1,30 @@
+// Navbar Component (with Next.js routing)
 "use client";
 import React, { useState } from "react";
-import { Search, Globe, Wallet, Bitcoin } from "lucide-react";
-import { useMetaMask } from '../hooks/useMetaCustomHooks';
-
+import { Search, Globe, Bitcoin } from "lucide-react";
+import { useRouter } from "next/navigation"; // Import the useRouter hook
+import { useTronLink, WalletConnectButton } from '../hooks/useTronLink';
 
 export default function Navbar() {
-  const { isConnected, connectToMetaMask } = useMetaMask();
+  // const { isConnected, connectToMetaMask } = useMetaMask();
   const [selected, setSelected] = useState("");
+  const router = useRouter();
+  const { accountData, isConnected, connectToTronLink, setAccountData, setIsConnected } = useTronLink();
+
+  const handleConnectToTronLink = async () => {
+    await connectToTronLink();
+  };
+
+  const disconnectWallet = () => {
+    setAccountData(null);
+    setIsConnected(false);
+  };
 
   const handleSelect = (link: string) => {
     setSelected(link);
+    if (link === "LAUNCH") {
+      router.push("/launch"); // Navigate to /launch page
+    }
   };
 
   return (
@@ -19,16 +34,15 @@ export default function Navbar() {
           <span className="text-orange-500 font-bold text-xl">BLUR</span>
           <div className="flex space-x-4 text-xs font-semibold">
             {["TOKENS", "PORTFOLIO", "ACTIVITY", "LAUNCH"].map((link) => (
-              <a
+              <button
                 key={link}
-                href="#"
                 className={`hover:text-white ${
                   selected === link ? "text-[#F6AE2D]" : ""
                 }`}
                 onClick={() => handleSelect(link)}
               >
                 {link}
-              </a>
+              </button>
             ))}
           </div>
         </div>
@@ -49,15 +63,14 @@ export default function Navbar() {
           <div className="bg-blue-600 p-2 rounded-md text-white">
             <Bitcoin className="h-5 w-5" />
           </div>
-          <button
-            onClick={connectToMetaMask}
-            className="bg-orange-500 text-black px-8 py-2 rounded-md text-xs font-semibold flex items-center space-x-2 hover:bg-white transition duration-300"
-          >
-            <Wallet className="h-5 w-5" />
-            <span>{isConnected ? "CONNECTED" : "CONNECT WALLET"}</span>
-          </button>
+          <WalletConnectButton 
+            isConnected={isConnected} 
+            connectToTronLink={handleConnectToTronLink} 
+            accountData={accountData} 
+            disconnectWallet={disconnectWallet} 
+          />
         </div>
       </div>
     </nav>
   );
-};
+}

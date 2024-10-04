@@ -143,8 +143,8 @@ const CollectionsList: React.FC<CollectionsListProps> = ({ data }) => {
                   <Image
                     src={profileImage}
                     alt={`${item.project} profile`}
-                    width={32}
-                    height={32}
+                    width={36}
+                    height={36}
                     className="rounded-full mr-4"
                   />
                   <span>{item.project}</span>

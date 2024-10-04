@@ -39,7 +39,7 @@ export default function PopularCollections() {
   ];
 
   return (
-    <section className="bg-black py-16">
+    <section className="bg-retroBg py-16">
       <div className="container mx-auto text-center">
         <h2 className="text-retroHighlight text-3xl sm:text-4xl md:text-5xl font-bold mb-10">
           Popular Collections
@@ -50,7 +50,7 @@ export default function PopularCollections() {
               <div
                 key={index}
                 className="inline-block bg-black border border-gray-700 rounded-lg overflow-hidden group hover:shadow-xl transition-shadow duration-300 relative"
-                style={{ width: "400px" }}
+                style={{ width: "500px" }}
               >
                 <div>
                   <img

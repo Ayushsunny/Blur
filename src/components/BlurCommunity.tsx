@@ -1,6 +1,6 @@
 export default function BlurCommunity() {
   return (
-    <section className="relative bg-black text-retroText py-16 overflow-hidden">
+    <section className="relative bg-retroBg text-retroText py-16 overflow-hidden">
       <div className="absolute inset-0 grid-lines z-0"></div>
 
       <div className="container mx-auto text-center z-10 relative">
